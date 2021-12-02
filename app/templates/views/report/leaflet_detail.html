@@ -1,0 +1,141 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+                <p class="text-right">
+                    <a href="{{ url_for("task.leaflet_detail", lid=leaflet.id) }}" class="btn btn-outline btn-primary">Föy
+                        Düzenle</a>
+                    <a href="{{ url_for("report.task_detail", tid=leaflet.line.task.id) }}" class="btn btn btn-primary">Sayım
+                        Rapor Sayfası</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ error(form) }}
+                {{ alert() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        İndi / Bindi Bilgisi
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-bordered table-hover" id="entries">
+                            <thead>
+                            <tr>
+                                <th>Durak Adı</th>
+                                <th>Binen Yolcu</th>
+                                <th>İnen Yolcu</th>
+                                <th>Damga</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for entry in leaflet.entries %}
+                                <tr>
+                                    <td>{{ entry.station_name }}</td>
+                                    <td>{{ entry.entry or "" }}</td>
+                                    <td>{{ entry.exit or "" }}</td>
+                                    <td>{{ entry.created_at }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Toplam Binen Yolcu</td>
+                                <td>{{ leaflet.get_total_entry().total_entry }}</td>
+                                <td>Toplam İnen Yolcu</td>
+                                <td colspan="2">{{ leaflet.get_total_entry().total_exit }} </td>
+                                <td style="display: none;"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Föy Detay
+                    </div>
+                    <div class="panel-body">
+                        <form action="">
+                            {{ form.csrf_token() }}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.plate.label() }}
+                                        {{ form.plate(class="form-control", disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_hour.label() }}
+                                        {{ form.time_hour(class="form-control", disabled=True) }}
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_minute.label() }}
+                                        {{ form.time_minute(class="form-control", disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.number.label() }}
+                                        {{ form.number(class="form-control", disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.direction.label() }}
+                                        {{ form.direction(class="form-control", disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#entries').DataTable({
+                order: [[3, "desc"]],
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            });
+        });
+    </script>
+    <script type="text/javascript" src="    https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"/>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+                <p class="text-right">
+                   <a href="{{ url_for("task.line_create", tid=task.id) }}" class="btn btn-outline btn-primary">Hat Oluştur</a>
+                    <a href="{{ url_for("task.user_index", tid=task.id) }}" class="btn btn-outline btn-primary">Sayıma Atanmış Kullanıcılar</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ error(form) }}
+                {{ alert() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Sayıma Dahil Hatlar
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-bordered table-hover" id="lines">
+                            <thead>
+                            <tr>
+                                <th>Başlık</th>
+                                <th>Sefer Sayısı</th>
+                                <th>Araç Sayısı (G/T)</th>
+                                <th>Ortalama Mesafe</th>
+                                <th>Sefer Süresi</th>
+                                <th>Sefer Aralığı</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for line in task.lines %}
+                                <tr>
+                                    <td><a href="{{ url_for("task.line_detail", lid=line.id) }}">{{ line.title }} ({{ line.code }})</a></td>
+                                    <td>{{ line.number_of_daily_expeditions }}</td>
+                                    <td>{{ line.number_of_daily_vehicles }} / {{ line.number_of_total_vehicles }}</td>
+                                    <td>{{ line.average_distance }}</td>
+                                    <td>{{ line.average_time_of_expeditions }}</td>
+                                    <td>{{ line.frequency_of_expeditions }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Sayım Detay
+                    </div>
+                    <div class="panel-body">
+                        <form action="" method="POST">
+                            {{ form.csrf_token() }}
+                            <div class="form-group">
+                                {{ form.title.label() }}
+                                {{ form.title(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.date.label() }}
+                                {{ form.date(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.note.label() }}
+                                {{ form.note(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.status.label() }}
+                                {{ form.status(class="form-control") }}
+                            </div>
+                            <div class="form-group text-right">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#lines').DataTable({
+                responsive: true,
+                "order": [[4, "desc"]]
+            });
+        });
+    </script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables/js/jquery.dataTables.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.js") }}"></script>
+{% endblock %}
+
+{% block css %}
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.css") }}"
+          rel="stylesheet">
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.css") }}"
+          rel="stylesheet">
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{{ title }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Atandığınız Sayımlar
+                </div>
+                <div class="panel-body">
+                    {% for task in tasks %}
+                        <p>
+                            <a href="{{ url_for("count.task_detail", tid=task.id) }}">{{ task.title }}</a>
+                            <br>↳ {{ task.date }}
+                            <br>↳ {{ task.note }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Son Oluşturduğunuz Föyler
+                </div>
+                <div class="panel-body">
+                    {% for leaflet in leaflets %}
+                        <p>
+                            Plaka: <a
+                                href="{{ url_for("count.leaflet_detail", lid=leaflet.id) }}">{{ leaflet.plate }}
+                            (Föy Numarası: {{ leaflet.number }} / {{ leaflet.get_leaflet_direction() }})</a><br>
+                            ↳ Oluşturma Tarihi: {{ leaflet.created_at }}<br>
+                            ↳ Düzenleme Tarihi: {{ leaflet.updated_at }}<br><br>
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

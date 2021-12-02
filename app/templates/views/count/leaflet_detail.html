@@ -1,0 +1,104 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+                <p class="text-right">
+                    {% if leaflet.is_completed == False %}
+                        <a href="{{ url_for("count.counting", lid=leaflet.id) }}" class="btn btn-outline btn-primary">Sayıma
+                            Başla / Devam Et</a>
+                    {% endif %}
+                    <a href="{{ url_for("count.line_detail", lid=leaflet.line.id) }}" class="btn btn btn-primary">Föy
+                        Yönetimi Sayfası</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ error(form) }}
+                {{ alert() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        İndi / Bindi Bilgisi
+                    </div>
+                    <div class="panel-body">
+                        {% for entry in leaflet.entries %}
+                            <a href="{{ url_for("count.entry_detail", eid=entry.id) }}">{{ entry.station_name }}</a> ({{ entry.created_at }})<br>
+                            ↳ Binen Yolcu: {{ entry.entry or 0 }} / İnen Yolcu: {{ entry.exit or 0 }}<br><br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Föy Detay
+                    </div>
+                    <div class="panel-body">
+                        <form action="" method="POST">
+                            {{ form.csrf_token() }}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.plate.label() }}
+                                        {{ form.plate(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_hour.label() }}
+                                        {{ form.time_hour(class="form-control") }}
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_minute.label() }}
+                                        {{ form.time_minute(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.number.label() }}
+                                        {{ form.number(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.direction.label() }}
+                                        {{ form.direction(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group text-right">
+                                        {{ form.submit(class="btn btn-primary") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% if leaflet.is_completed == False %}
+                            <hr>
+                            <a href="{{ url_for("count.leaflet_close", lid=leaflet.id) }}"
+                               class="btn btn-danger btn-lg btn-block">Föyü Kapat</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

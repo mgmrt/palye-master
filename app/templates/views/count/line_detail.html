@@ -1,0 +1,105 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+                <p class="text-right">
+                    <a href="{{ url_for("count.task_detail", tid=line.task.id) }}" class="btn btn btn-primary">Sayım
+                        Yönetimi Sayfası</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ error(form) }}
+                {{ alert() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Föy Oluştur
+                    </div>
+                    <div class="panel-body">
+                        <form action="" method="POST">
+                            {{ form.csrf_token() }}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.plate.label() }}
+                                        {{ form.plate(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_hour.label() }}
+                                        {{ form.time_hour(class="form-control") }}
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.time_minute.label() }}
+                                        {{ form.time_minute(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.number.label() }}
+                                        {{ form.number(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.direction.label() }}
+                                        {{ form.direction(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group text-right">
+                                        {{ form.submit(class="btn btn-primary") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Oluşturulan Föyler
+                    </div>
+                    <div class="panel-body">
+                        {% if line.leaflets %}
+                            {% for leaflet in line.leaflets[::-1] %}
+                                {% if leaflet.user == current_user %}
+                                    Plaka:
+                                    <a href="{{ url_for("count.leaflet_detail", lid=leaflet.id) }}">{{ leaflet.plate }}
+                                        (Föy Numarası: {{ leaflet.number }}) ({{ leaflet.get_leaflet_direction() }})</a>
+                                    <br>
+                                    ↳ Oluşturma Tarihi: {{ leaflet.created_at }}<br>
+                                    ↳ Düzenleme Tarihi: {{ leaflet.updated_at }}<br><br>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Föy Oluşturulmamış
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

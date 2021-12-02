@@ -1,0 +1,84 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+                <p class="text-right">
+                    <a href="{{ url_for("report.export_one", tid=task.id) }}" class="btn btn-outline btn-primary">Sayılan Sefer</a>
+                    <a href="{{ url_for("report.export_two", tid=task.id) }}" class="btn btn-outline btn-primary">Toplam Yolcu</a>
+                    <a href="{{ url_for("report.export_three", tid=task.id) }}" class="btn btn-outline btn-primary">Sefer Başına Ortalama Yolcu</a>
+                    <a href="{{ url_for("report.export_five", tid=task.id) }}" class="btn btn-outline btn-primary">Araç Başına Ortalama Yolcu</a>
+                    <a href="{{ url_for("report.export_six", tid=task.id) }}" class="btn btn-outline btn-primary">Birim KM'de Taşınan Yolcu</a>
+                    <a href="{{ url_for("report.export_seven", tid=task.id) }}" class="btn btn-outline btn-primary">Sayım Oranı</a>
+                    <a href="{{ url_for("report.line_index", tid=task.id) }}" class="btn btn-outline btn-primary">DBS</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Oluşturulan Sayımlar
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-bordered table-hover" id="leaflets">
+                            <thead>
+                            <tr>
+                                <th>Oluşturan Kullanıcı</th>
+                                <th>Araç Plaka</th>
+                                <th>Föy Başlangıç Saati</th>
+                                <th>Föy Bitiş Saati</th>
+                                <th>Sefer Numarası</th>
+                                <th>Sefer Yönü</th>
+                                <th>Durumu</th>
+                                <th>İşlem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for leaflet in leaflets %}
+                                <tr>
+                                    <td>{{ leaflet.user.full_name }}</td>
+                                    <td>{{ leaflet.plate }}</td>
+                                    <td>{{ leaflet.departure_time }}</td>
+                                    <td>{{ leaflet.finish_time or "" }}</td>
+                                    <td>{{ leaflet.number }}</td>
+                                    <td>{{ leaflet.get_leaflet_direction() }}</td>
+                                    <td>{{ "Tamamlandı" if leaflet.is_completed else "Tamamlanmadı" }}</td>
+                                    <td><a href="{{ url_for("report.leaflet_detail", lid=leaflet.id) }}">Detay</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#leaflets').DataTable({
+                responsive: true,
+                "order": [[2, "desc"]]
+            });
+        });
+    </script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables/js/jquery.dataTables.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.js") }}"></script>
+{% endblock %}
+
+{% block css %}
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.css") }}"
+          rel="stylesheet">
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.css") }}"
+          rel="stylesheet">
+{% endblock %}

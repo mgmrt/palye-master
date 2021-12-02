@@ -1,0 +1,120 @@
+{% from "macros/alerts.html" import error, alert %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Palye Hat Optimizasyon">
+    <meta name="author" content="Yunus Emre Geldegül">
+    <title>
+        {% if title is defined %}
+            {{ title }} | {{ config["TITLE"] }}
+        {% else %}
+            {{ config["TITLE"] }} | {{ config["BRIEF"] }}
+        {% endif %}
+    </title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ url_for("static", filename="assets/vendor/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="{{ url_for("static", filename="assets/vendor/metisMenu/metisMenu.min.css") }}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for("static", filename="assets/dist/css/sb-admin-2.css") }}" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="{{ url_for("static", filename="assets/vendor/font-awesome/css/font-awesome.min.css") }}"
+          rel="stylesheet" type="text/css">
+    <!-- Custom Page CSS -->
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+<div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for("main.index") }}">{{ config["TITLE"] }}
+                ({{ current_user.full_name }})</a>
+        </div>
+        <!-- /.navbar-header -->
+
+        {% if current_user.role.name == "admin" %}
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Sefer Arama">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href="{{ url_for("main.index") }}"><i class="fa fa-dashboard fa-fw"></i> Ana Sayfa</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for("task.task_index") }}"><i class="fa fa-road fa-fw"></i> Sayım
+                                Yönetimi</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for("report.index") }}"><i class="fa fa-bar-chart-o fa-fw"></i> Rapor Yönetimi</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for("user.index") }}"><i class="fa fa-users fa-fw"></i> Kullanıcı
+                                Yönetimi</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for("user.detail", uid=current_user.id) }}"><i class="fa fa-user fa-fw"></i>
+                                Profil Yönetimi</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for("auth.logout") }}"><i class="fa fa-sign-out fa-fw"></i> Çıkış Yap</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+        {% else %}
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="{{ url_for("auth.logout") }}"><i class="fa fa-sign-out fa-fw"></i> Çıkış Yap</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+        {% endif %}
+        <!-- /.navbar-static-side -->
+    </nav>
+    <!-- Custom Page Content -->
+    {% block content %}
+
+    {% endblock %}
+</div>
+<!-- jQuery -->
+<script src="{{ url_for("static", filename="assets/vendor/jquery/jquery.min.js") }}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ url_for("static", filename="assets/vendor/bootstrap/js/bootstrap.min.js") }}"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ url_for("static", filename="assets/vendor/metisMenu/metisMenu.min.js") }}"></script>
+<!-- Custom Theme JavaScript -->
+<script src="{{ url_for("static", filename="assets/dist/js/sb-admin-2.js") }}"></script>
+<!-- Custom Page JavaScript -->
+{% block js %}
+
+{% endblock %}
+</body>
+</html>

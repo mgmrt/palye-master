@@ -1,0 +1,89 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ error(form) }}
+                {{ alert() }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Kullanıcı Düzenle
+                    </div>
+                    <div class="panel-body">
+                        <form action="" method="POST">
+                            {{ form.csrf_token() }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.username.label() }}
+                                        {{ form.username(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.phone_number.label() }}
+                                        {{ form.phone_number(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.first_name.label() }}
+                                        {{ form.first_name(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.last_name.label() }}
+                                        {{ form.last_name(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.status.label() }}
+                                        {{ form.status(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.role.label() }}
+                                        {{ form.role(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.password.label() }}
+                                        {{ form.password(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form.note.label() }}
+                                        {{ form.note(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group text-right">
+                                        {{ form.submit(class="btn btn-primary") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="help-block">
+                                <b>Dikkat!</b> Kullanıcı statüsünü dikkatli seçin, "silinmiş" olarak işaretlendiği taktirde kullanıcı sistemden silinir.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

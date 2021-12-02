@@ -1,0 +1,64 @@
+{% extends "assets/base_pages/site_base.html" %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ title }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Sayıma Kayıtlı Hatlar
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-bordered table-hover" id="tasks">
+                            <thead>
+                            <tr>
+                                <th>Hat İsmi</th>
+                                <th>Hat Kodu</th>
+                                <th>İşlem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for line in task.lines %}
+                                <tr>
+                                    <td>{{ line.title }}</td>
+                                    <td>{{ line.code }}</td>
+                                    <td><a href="{{ url_for("report.export_eight", lid=line.id) }}">İndir</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#tasks').DataTable({
+                responsive: true,
+                "order": [[4, "desc"]]
+            });
+        });
+    </script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables/js/jquery.dataTables.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.min.js") }}"></script>
+    <script src="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.js") }}"></script>
+{% endblock %}
+
+{% block css %}
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-plugins/dataTables.bootstrap.css") }}"
+          rel="stylesheet">
+    <link href="{{ url_for("static", filename="assets/vendor/datatables-responsive/dataTables.responsive.css") }}"
+          rel="stylesheet">
+{% endblock %}
